@@ -25,15 +25,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "hell_error"
+name = "hell_core"
 version = "0.1.0"
 
 [[package]]
-name = "hell_web"
+name = "hell_utils_web"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
- "hell_error",
+ "hell_core",
  "js-sys",
  "paste",
  "wasm-bindgen",
@@ -41,11 +41,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "hellmut_client"
+name = "hellm_web_client"
 version = "0.1.0"
 dependencies = [
- "hell_error",
- "hell_web",
+ "hell_core",
+ "hell_utils_web",
  "js-sys",
  "wasm-bindgen",
  "wasm-bindgen-futures",

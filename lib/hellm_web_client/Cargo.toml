@@ -1,5 +1,5 @@
 [package]
-name = "hellmut_client"
+name = "hellm_web_client"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -9,11 +9,8 @@ authors.workspace = true
 crate-type = [ "cdylib" ]
 
 [dependencies]
-# hust
-hell_error.workspace = true
-hell_web.workspace = true
-
-# extern
+hell_core.workspace = true
+hell_utils_web.workspace = true
 web-sys.workspace = true
 js-sys.workspace = true
 wasm-bindgen.workspace = true

@@ -7,20 +7,22 @@ members = [
 exclude = [ ]
 
 
-[workspace.package]
-version = "0.1.0"
-edition = "2021"
-authors = [ "helloki@mailbox.org" ]
 
+[workspace.package]
+authors = [ "lucas muller <muller.lucas@mailbox.org>" ]
+edition = "2021"
+version = "0.1.0"
 
 
 
 [workspace.dependencies]
-# hust
-hell_error = { path = "./hust/lib/hell_error" }
-hell_web   = { path = "./hust/lib/hell_web" }
+# hellmut
+# -------
+hell_core       = { path = "./hellmut/lib/hell_core" }
+hell_utils_web  = { path = "./hellmut/lib/hell_utils_web" }
 
 # extern
+# ------
 wasm-bindgen = "0.2.84"
 wasm-bindgen-futures = "0.4.34"
 console_error_panic_hook = "0.1.7"

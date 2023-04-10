@@ -1,13 +1,13 @@
 mod view;
 
 
-use hell_web::{view::{Element, Runtime}, console_log};
+use hell_utils_web::{view::{Element, Runtime}, console_log};
 use wasm_bindgen::prelude::*;
 
 
 #[wasm_bindgen(start)]
 pub async fn run() -> Result<(), JsValue> {
-    hell_web::logging::init_logging();
+    hell_utils_web::logging::init_logging();
 
     let rt = Runtime::new();
     let mut body: Element = rt
