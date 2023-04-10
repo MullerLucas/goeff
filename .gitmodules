@@ -1,0 +1,3 @@
+[submodule "hellmut"]
+	path = hellmut
+	url = git@gitlab.com:helloki/hellmut.git
