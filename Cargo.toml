@@ -1,0 +1,42 @@
+[workspace]
+members = [
+    "lib/*",
+    # "bin/*"
+]
+
+exclude = [ ]
+
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = [ "helloki@mailbox.org" ]
+
+
+
+
+[workspace.dependencies]
+# hust
+hell_error = { path = "./hust/lib/hell_error" }
+hell_web   = { path = "./hust/lib/hell_web" }
+
+# extern
+wasm-bindgen = "0.2.84"
+wasm-bindgen-futures = "0.4.34"
+console_error_panic_hook = "0.1.7"
+js-sys = "0.3.61"
+
+# macros
+paste = "1.0.12"
+
+[workspace.dependencies.web-sys]
+version = "0.3.61"
+features = [
+    "Document",
+    "Element",
+    "HtmlElement",
+    "HtmlButtonElement",
+    "Node",
+    "Window",
+    "DomTokenList",
+]
