@@ -10,14 +10,21 @@ pub async fn run() -> Result<(), JsValue> {
     hell_utils_web::logging::init_logging();
 
     let rt = Runtime::new();
-    let mut body: Element = rt
+    let _body: Element = rt
         .document()
         .body().expect("document should have a body")
         .try_into().unwrap();
 
     let test = rt.create_signal(69);
-    console_log!("TESTA: {:?}", test.get());
-    console_log!("TEST: {:?}", rt);
+    console_log!("TEST-A: {:?}", test.get());
+
+    rt.create_effect(move || {
+        console_log!("EFFECT-IS-RUNNING: {}", test.get());
+    });
+
+    test.set(1234);
+    console_log!("TEST-B: {:?}", test.get());
+
 
     wait_for_end_of_universe().await.unwrap();
     console_log!("exit...");
