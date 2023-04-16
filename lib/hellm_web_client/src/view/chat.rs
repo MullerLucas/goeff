@@ -23,8 +23,8 @@ pub fn create_chat(cx: Context) -> HellResult<Element> {
     input_box.append_child(&input_send_btn)?;
 
     input_send_btn.add_event_listener("click", move || {
-        let mut output_box = output_box_h.get_element();
-        let input_field = input_field_h.get_input();
+        let mut output_box = output_box_h.get();
+        let input_field = input_field_h.get().to_input();
 
         let txt = input_field.value();
         let msg = create_chat_msg(cx, &txt).expect("failed to create chat-msg");
