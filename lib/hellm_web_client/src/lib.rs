@@ -1,33 +1,16 @@
 mod view;
 
 
-use hell_utils_web::{view::{Element, Runtime}, console_log};
+use hell_core::error::HellResult;
+use hell_utils_web::view::{Context, Element};
 use wasm_bindgen::prelude::*;
 
 
 #[wasm_bindgen(start)]
 pub async fn run() -> Result<(), JsValue> {
-    hell_utils_web::logging::init_logging();
-
-    let rt = Runtime::new();
-    let _body: Element = rt
-        .document()
-        .body().expect("document should have a body")
-        .try_into().unwrap();
-
-    let test = rt.create_signal(69);
-    console_log!("TEST-A: {:?}", test.get());
-
-    rt.create_effect(move || {
-        console_log!("EFFECT-IS-RUNNING: {}", test.get());
-    });
-
-    test.set(1234);
-    console_log!("TEST-B: {:?}", test.get());
-
-
-    wait_for_end_of_universe().await.unwrap();
-    console_log!("exit...");
+    run_hell()
+        .await
+        .unwrap();
 
     Ok(())
 }
@@ -35,6 +18,22 @@ pub async fn run() -> Result<(), JsValue> {
 #[wasm_bindgen]
 pub fn version_number() -> String {
     "0.1".to_string()
+}
+
+async fn run_hell() -> HellResult<()> {
+    hell_utils_web::logging::init_logging();
+
+    let cx = Context::new();
+    let (mut body, _) = Element::try_from_html(
+        cx,
+        cx.document().body().expect("expected there to be a body")
+    )?;
+
+    let chat = view::chat::create_chat(cx)?;
+    body.append_child(&chat)?;
+
+    wait_for_end_of_universe().await.unwrap();
+    Ok(())
 }
 
 fn wait_for_end_of_universe() -> wasm_bindgen_futures::JsFuture {
