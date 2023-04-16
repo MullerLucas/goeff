@@ -1,6 +1,6 @@
 .chat_output_box {
     border: 2px solid black;
-    min-height: 5em;
+    min-height: 30vh;
     display: grid;
     gap: .5em;
 }

@@ -2,7 +2,7 @@ mod view;
 
 
 use hell_core::error::HellResult;
-use hell_utils_web::view::{Context, Element};
+use hell_utils_web::view::{Context, Element, ElementContainer};
 use wasm_bindgen::prelude::*;
 
 
@@ -24,10 +24,7 @@ async fn run_hell() -> HellResult<()> {
     hell_utils_web::logging::init_logging();
 
     let cx = Context::new();
-    let (mut body, _) = Element::try_from_html(
-        cx,
-        cx.document().body().expect("expected there to be a body")
-    )?;
+    let (mut body, _) = Element::create_body(cx)?;
 
     let chat = view::chat::create_chat(cx)?;
     body.append_child(&chat)?;
