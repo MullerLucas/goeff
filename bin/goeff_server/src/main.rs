@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 #[tokio::main]
 async fn main() {
     println!("starting goeff-server ...");
+    dotenv::dotenv().ok();
 
     // initialize tracing
     tracing_subscriber::fmt::init();
@@ -16,7 +17,8 @@ async fn main() {
         // `GET /` goes to `root`
         .route("/", get(root))
         // `POST /users` goes to `create_user`
-        .route("/users", post(create_user));
+        .route("/joke", get(joke))
+        .route("/models", get(list_models));
 
     // run our app with hyper
     // `axum::Server` is a re-export of `hyper::Server`
@@ -32,35 +34,13 @@ async fn main() {
 
 
 async fn root() -> &'static str {
-    "Hello, World!"
+    "Hello, Goeff!"
 }
 
-async fn create_user(
-    // this argument tells axum to parse the request body
-    // as JSON into a `CreateUser` type
-    Json(payload): Json<CreateUser>,
-) -> (StatusCode, Json<User>) {
-    // insert your application logic here
-    let user = User {
-        id: 1337,
-        username: payload.username,
-    };
-
-    // this will be converted into a JSON response
-    // with a status code of `201 Created`
-    (StatusCode::CREATED, Json(user))
+async fn list_models() -> String {
+    hell_mod_openai::list_models().await
 }
 
-// the input to our `create_user` handler
-#[derive(Deserialize)]
-struct CreateUser {
-    username: String,
+async fn joke() -> String {
+    hell_mod_openai::send_request().await
 }
-
-// the output to our `create_user` handler
-#[derive(Serialize)]
-struct User {
-    id: u64,
-    username: String,
-}
-

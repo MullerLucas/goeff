@@ -6,8 +6,10 @@ authors.workspace = true
 
 [dependencies]
 hell_core.workspace = true
+hell_mod_openai.workspace = true
 
 axum.workspace = true
+dotenv.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
