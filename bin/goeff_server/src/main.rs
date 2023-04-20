@@ -42,5 +42,7 @@ async fn list_models() -> String {
 }
 
 async fn joke() -> String {
-    hell_mod_openai::send_request().await
+    serde_json::to_string_pretty(
+        &hell_mod_openai::send_request().await.unwrap()
+    ).unwrap()
 }

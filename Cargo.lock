@@ -265,6 +265,7 @@ dependencies = [
  "hell_core",
  "hell_mod_openai",
  "serde",
+ "serde_json",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -303,6 +304,7 @@ version = "0.1.0"
 name = "hell_mod_openai"
 version = "0.1.0"
 dependencies = [
+ "hell_core",
  "reqwest",
  "serde",
  "serde_json",
