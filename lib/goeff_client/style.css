@@ -1,0 +1,55 @@
+body {
+    height: 90vh;
+    height: 90svh;
+    background-color: #222222;
+}
+
+.page {
+    display: grid;
+    gap: .5em;
+    justify-items: center;
+    height: 100%;
+}
+
+.content {
+    width: min(max(30em, 50%), 70em);
+    height: 100%;
+}
+
+.chat {
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+    grid-template-rows: 9fr 1fr;
+}
+
+.chat_output_box {
+    border: 2px solid black;
+    background-color: white;
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.chat_input_box {
+    background-color: darkgray;
+    padding: 1em;
+
+    display: grid;
+    grid-template-columns: 8fr 1fr;
+    gap: 1em;
+}
+
+.chat_input_send_btn {
+    border: 0;
+    background-color: lightgreen;
+}
+
+.chat_msg {
+    background-color: lightblue;
+    min-height: 3em;
+    padding: .5em;
+}

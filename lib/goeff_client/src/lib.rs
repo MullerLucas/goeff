@@ -2,7 +2,7 @@ mod view;
 
 
 use hell_core::error::HellResult;
-use hell_utils_web::view::{Context, Element, ElementContainer};
+use hell_mod_web_client::view::{Context, Element, ElementContainer};
 use wasm_bindgen::prelude::*;
 
 
@@ -21,13 +21,21 @@ pub fn version_number() -> String {
 }
 
 async fn run_hell() -> HellResult<()> {
-    hell_utils_web::logging::init_logging();
+    hell_mod_web_client::logging::init_logging();
 
     let cx = Context::new();
     let (mut body, _) = Element::create_body(cx)?;
 
+    let (mut page, _) = Element::create_div(cx)?;
+    page.add_class("page")?;
+    body.append_child(&page)?;
+
+    let (mut content, _) = Element::create_div(cx)?;
+    content.add_class("content")?;
+    page.append_child(&content)?;
+
     let chat = view::chat::create_chat(cx)?;
-    body.append_child(&chat)?;
+    content.append_child(&chat)?;
 
     wait_for_end_of_universe().await.unwrap();
     Ok(())

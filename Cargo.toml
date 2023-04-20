@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "lib/*",
-    # "bin/*"
+    "bin/*"
 ]
 
 exclude = [ ]
@@ -18,8 +18,8 @@ version = "0.1.0"
 [workspace.dependencies]
 # hellmut
 # -------
-hell_core       = { path = "./hellmut/lib/hell_core" }
-hell_utils_web  = { path = "./hellmut/lib/hell_utils_web" }
+hell_core           = { path = "./hellmut/lib/hell_core" }
+hell_mod_web_client = { path = "./hellmut/lib/hell_mod_web_client" }
 
 # extern
 # ------
@@ -30,6 +30,11 @@ js-sys = "0.3.61"
 
 # macros
 paste = "1.0.12"
+axum = "0.6.16"
+tokio = { version = "1.27.0", features = ["full"] }
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
+serde = { version = "1.0.130", features = ["derive"] }
 
 [workspace.dependencies.web-sys]
 version = "0.3.61"
@@ -44,3 +49,4 @@ features = [
     "Window",
     "DomTokenList",
 ]
+

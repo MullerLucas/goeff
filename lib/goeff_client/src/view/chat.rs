@@ -1,8 +1,9 @@
 use hell_core::error::HellResult;
-use hell_utils_web::{view::{Element, Context, ElementContainer}, console_info};
+use hell_mod_web_client::{view::{Element, Context, ElementContainer}, console_info};
 
 pub fn create_chat(cx: Context) -> HellResult<Element> {
     let (mut chat, _) = Element::create_div(cx)?;
+    chat.add_class("chat")?;
 
     let (mut output_box, output_box_h)= Element::create_div(cx)?;
     output_box.add_class("chat_output_box")?;

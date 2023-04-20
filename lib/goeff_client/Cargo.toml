@@ -1,5 +1,5 @@
 [package]
-name = "hellm_web_client"
+name = "goeff_client"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -10,7 +10,8 @@ crate-type = [ "cdylib" ]
 
 [dependencies]
 hell_core.workspace = true
-hell_utils_web.workspace = true
+hell_mod_web_client.workspace = true
+
 web-sys.workspace = true
 js-sys.workspace = true
 wasm-bindgen.workspace = true
