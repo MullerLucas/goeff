@@ -13,12 +13,15 @@ pub type JsonResult<R> = HellResult<axum::Json<R>>;
 pub async fn run_server() -> HellResult<()> {
     let app = Router::new()
         .route("/",       get(root))
-        .route("/models", get(query_models))
+        .route("/api/models", get(query_models))
+        .route("/test", get(query_models))
         .route("/chat",   post(process_chat))
         .with_state(GoeffServerState::new());
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    tracing::debug!("listening on {}", addr);
+    // let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    // NOTE (lm): docher host addr
+    let addr = SocketAddr::from(([172, 17, 0, 1], 3000));
+    println!("running server on addr '{:?}'", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await

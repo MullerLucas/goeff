@@ -1,0 +1,14 @@
+#!/bin/sh
+
+orig_dir=$(pwd)
+sh_dir=$(dirname $0)
+docker_dir="$sh_dir/../docker"
+
+echo "entering docker dir..."
+cd "$docker_dir" || exit 1
+echo "starting docker service..."
+sudo systemctl start docker || exit 1
+echo "starting docker containers..."
+sudo docker compose up --build
+echo "returning to original dir..."
+cd "$orig_dir" | exit 1
