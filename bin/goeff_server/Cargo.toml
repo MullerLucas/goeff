@@ -5,7 +5,7 @@ edition.workspace = true
 authors.workspace = true
 
 [dependencies]
-hell_core.workspace = true
+hell_core = { workspace = true, features = ["axum"] }
 hell_mod_llm.workspace = true
 
 axum.workspace = true
