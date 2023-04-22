@@ -6,7 +6,7 @@ authors.workspace = true
 
 [dependencies]
 hell_core.workspace = true
-hell_mod_openai.workspace = true
+hell_mod_llm.workspace = true
 
 axum.workspace = true
 dotenv.workspace = true

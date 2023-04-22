@@ -1,59 +1,71 @@
 use axum::{extract::State, Json};
-use hell_core::error::HellResult;
-use hell_mod_openai::{chat::{ChatRequest, ChatRequestData, ChatMessage}, model::LangModel};
+use hell_mod_llm::{openai::{model::OpenaiLangModel, chat::{OpenaiChatMessage, OpenaiChatSuccessResponse}}, llm::{chat::{LlmChatMessage, LlmChatRequest, LlmChatSuccessResponse}, model::LlmModelList}};
+use crate::{server::JsonResult, state::ServerState};
 
-use crate::server::ServerState;
+
+#[inline]
+fn json_result<R>(val: R) -> JsonResult<R>
+where R: serde::Serialize,
+{
+    Ok(Json(val))
+}
+
+// ----------------------------------------------------------------------------
 
 pub async fn root() -> &'static str {
     "Goeff Jipedy greets you!"
 }
 
-pub async fn list_models() -> String {
-    hell_mod_openai::chat::list_models().await
+// ----------------------------------------------------------------------------
+
+pub async fn query_models(
+    State(state): ServerState,
+) -> JsonResult<LlmModelList>
+{
+    println!("calling query models ...");
+    let api = state.api(hell_mod_llm::llm::vendor::LlmVendor::Openai);
+    json_result(api.querry_models().await?)
 }
 
-pub async fn chat_example(State(state): ServerState) -> HellResult<String> {
-    println!("calling chat example...");
-    let cx = state.cx();
+// ----------------------------------------------------------------------------
 
-    let body = ChatRequestData::new(
-        LangModel::Gpt35Turbo,
-        vec![
-            ChatMessage::new_system("Answer every question in an unnecessary complicated but funny way without telling the actual answer"),
-            ChatMessage::new_user("Hello, who are you?"),
-        ],
-        None,
-        0.7)?;
-
-    let request = ChatRequest::from_data(&cx, &body);
-    let response = request.send().await?;
-
-    Ok(serde_json::to_string_pretty(&response)?)
-}
-
-#[derive(serde::Deserialize)]
-pub struct ChatCustomRequest {
+#[derive(Debug, serde::Deserialize)]
+pub struct GoeffChatRequest {
     pub msg: String,
 }
 
-pub async fn chat_custom(
-    State(state): ServerState,
-    Json(payload): Json<ChatCustomRequest>
-) -> HellResult<String> {
-    println!("calling chat example...");
-    let cx = state.cx();
-
-    let body = ChatRequestData::new(
-        LangModel::Gpt35Turbo,
-        vec![
-            ChatMessage::new_system("Answer every question in an unnecessary complicated but funny way without telling the actual answer"),
-            ChatMessage::new_user(payload.msg),
-        ],
-        None,
-        0.7)?;
-
-    let request = ChatRequest::from_data(cx, &body);
-    let response = request.send().await?;
-
-    Ok(serde_json::to_string_pretty(&response)?)
+#[derive(Debug, serde:: Serialize)]
+pub struct GoeffChatResponse {
+    pub message: OpenaiChatMessage,
+    pub total_tokens: u32,
 }
+
+impl From<OpenaiChatSuccessResponse> for GoeffChatResponse {
+    fn from(mut val: OpenaiChatSuccessResponse) -> Self {
+        Self {
+            message: val.choices.remove(0).message,
+            total_tokens: val.usage.total_tokens,
+        }
+    }
+}
+
+pub async fn process_chat(
+    State(state): ServerState,
+    Json(payload): Json<GoeffChatRequest>
+) -> JsonResult<LlmChatSuccessResponse> {
+    println!("calling chat example...");
+
+    let api = state.api(hell_mod_llm::llm::vendor::LlmVendor::Openai);
+
+    let data = LlmChatRequest::new(
+        OpenaiLangModel::Gpt35Turbo,
+        vec![
+            LlmChatMessage::new_system("Answer every question in an unnecessary complicated but funny way without telling the actual answer"),
+            LlmChatMessage::new_user(payload.msg),
+        ],
+        0.7);
+
+    json_result(api.process_chat(data).await?)
+}
+
+// ----------------------------------------------------------------------------

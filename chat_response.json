@@ -1,0 +1,22 @@
+{
+    "id":"chatcmpl-787ZJCOiYgz0R74Jf7E7WiyW128Yp",
+    "object":"chat.completion",
+    "created":1682170073,
+    "model":"gpt-3.5-turbo-0301",
+    "usage": {
+        "prompt_tokens": 36,
+        "completion_tokens": 153,
+        "total_tokens":189
+    },
+    "choices":[
+        {
+            "message": {
+                "role":"assistant",
+                "content":"Ah, the majestic peak known as Mount Everest. It rises up into the sky like a great titan of the earth, its snowy summit piercing the clouds like a frozen spear. To quantify its height, one would need to undertake a perilous journey to its peak, braving treacherous terrain and bone-chilling cold, all the while contending with the unpredictable whims of the mountain gods. But fear not, intrepid adventurer, for though I cannot give you an exact number, I can tell you that the height of Mount Everest is a number so vast and unfathomable that it would make even the most brilliant mathematician's head spin. So let us bask in the majesty of this great mountain and revel in the mystery of its towering height."
+            },
+            "finish_reason":"stop",
+            "index":0
+        }
+    ]
+}
+

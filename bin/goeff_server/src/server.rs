@@ -1,43 +1,20 @@
-use std::{net::SocketAddr, sync::Arc};
-
-use axum::{Router, routing::{get, post}, extract::State};
+use std::net::SocketAddr;
+use axum::{Router, routing::{get, post}};
 use hell_core::error::HellResult;
-use hell_mod_openai::context::ApiContext;
 
-use crate::endpoints::{root, chat_example, list_models, chat_custom};
+use crate::{endpoints::{root, query_models, process_chat}, state::GoeffServerState};
 
-#[derive(Default)]
-pub struct GoeffServerStateInner {
-    cx: ApiContext,
-}
 
-#[derive(Clone)]
-pub struct GoeffServerState {
-    inner: Arc<GoeffServerStateInner>,
-}
 
-pub type ServerState = State<GoeffServerState>;
-
-impl GoeffServerState {
-    pub fn new() -> Self {
-        Self {
-            inner: Arc::new(GoeffServerStateInner::default()),
-        }
-    }
-
-    pub fn cx(&self) -> &ApiContext {
-        &self.inner.cx
-    }
-}
+pub type JsonResult<R> = HellResult<axum::Json<R>>;
 
 
 
 pub async fn run_server() -> HellResult<()> {
     let app = Router::new()
-        .route("/", get(root))
-        .route("/chat/example", get(chat_example))
-        .route("/chat/custom", post(chat_custom))
-        .route("/models", get(list_models))
+        .route("/",       get(root))
+        .route("/models", get(query_models))
+        .route("/chat",   post(process_chat))
         .with_state(GoeffServerState::new());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

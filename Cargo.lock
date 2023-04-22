@@ -263,7 +263,7 @@ dependencies = [
  "axum",
  "dotenv",
  "hell_core",
- "hell_mod_openai",
+ "hell_mod_llm",
  "serde",
  "serde_json",
  "tokio",
@@ -304,9 +304,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "hell_mod_openai"
+name = "hell_mod_llm"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "hell_core",
  "reqwest",
  "serde",

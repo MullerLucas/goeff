@@ -1,7 +1,8 @@
-use hell_core::error::HellResult;
-
 mod endpoints;
 mod server;
+mod state;
+
+use hell_core::error::HellResult;
 
 
 #[tokio::main]
