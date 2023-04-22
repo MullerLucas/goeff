@@ -1,9 +1,10 @@
 mod view;
 
-
 use hell_core::error::HellResult;
-use hell_mod_web_client::view::{Context, Element, ElementContainer};
+use hell_mod_web_client::{view::{Context, Element, ElementContainer}, console_warn, fetch::FetchApi};
 use wasm_bindgen::prelude::*;
+
+
 
 
 #[wasm_bindgen(start)]
@@ -36,6 +37,10 @@ async fn run_hell() -> HellResult<()> {
 
     let chat = view::chat::create_chat(cx)?;
     content.append_child(&chat)?;
+
+    console_warn!("test");
+    let js_val = FetchApi::get().await;
+    console_warn!("TEST: {:?}", js_val);
 
     wait_for_end_of_universe().await.unwrap();
     Ok(())

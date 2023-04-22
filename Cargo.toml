@@ -44,12 +44,17 @@ version = "0.3.61"
 features = [
     "console",
     "Document",
+    "DomTokenList",
     "Element",
     "HtmlElement",
     "HtmlButtonElement",
     "HtmlInputElement",
+    "Headers",
     "Node",
+    "RequestInit",
+    "RequestMode",
+    "Request",
+    "Response",
     "Window",
-    "DomTokenList",
 ]
 
