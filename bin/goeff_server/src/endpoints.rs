@@ -1,6 +1,6 @@
 use axum::{extract::State, Json};
 use goeff_core::data::{GoeffChatRequest, GoeffChatResponse};
-use hell_mod_llm::{openai::model::OpenaiLangModel, llm::{chat::{LlmChatMessage, LlmChatRequest, LlmChatSuccessResponse}, model::LlmModelList}};
+use hell_mod_llm::{openai::model::OpenaiLangModel, llm::{chat::{LlmChatMessage, LlmChatRequest}, model::LlmModelList}};
 use crate::{server::JsonResult, state::ServerState};
 
 

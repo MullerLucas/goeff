@@ -11,13 +11,13 @@ pub struct GoeffChatRequest {
 
 #[derive(Debug, serde:: Serialize, serde::Deserialize)]
 pub struct GoeffChatResponse {
-    pub message: LlmChatMessage,
+    pub mgs: LlmChatMessage,
 }
 
 impl From<LlmChatSuccessResponse> for GoeffChatResponse {
     fn from(mut val: LlmChatSuccessResponse) -> Self {
         Self {
-            message: val.messages.remove(0),
+            mgs: val.messages.remove(0),
         }
     }
 }

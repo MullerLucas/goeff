@@ -1,31 +1,40 @@
 use hell_mod_web_client::view::Context;
+use crate::api::GoeffApiAsync;
 
-use crate::api::GoeffApi;
 
-#[allow(unused)]
+
 pub type State = GoeffClientState;
 
-pub struct GoeffClientState {
+pub struct GoeffClientStateInner {
     cx: Context,
-    api: GoeffApi,
+    api: GoeffApiAsync,
+}
+
+#[derive(Clone, Copy)]
+pub struct GoeffClientState {
+    inner: &'static GoeffClientStateInner,
 }
 
 impl GoeffClientState {
     pub fn new() -> Self {
         let cx = Context::new();
-        let api = GoeffApi::new(cx);
+        let api = GoeffApiAsync::new(cx);
 
-        Self {
+        let inner = Box::leak(Box::new(GoeffClientStateInner {
             cx,
             api,
+        }));
+
+        Self {
+            inner,
         }
     }
 
     pub fn cx(&self) -> Context {
-        self.cx
+        self.inner.cx
     }
 
-    pub fn api(&self) -> &GoeffApi {
-        &self.api
+    pub fn api(&self) -> &GoeffApiAsync {
+        &self.inner.api
     }
 }

@@ -1,16 +1,18 @@
 use goeff_core::data::{GoeffChatRequest, GoeffChatResponse};
 use hell_core::error::HellResult;
 use hell_mod_llm::llm::model::LlmModelList;
-use hell_mod_web_client::{view::Context, fetch::FetchApi};
+use hell_mod_web_client::{view::Context, fetch::FetchAsync};
 
-pub struct GoeffApi {
-    fetch: FetchApi,
+
+
+pub struct GoeffApiAsync {
+    fetch: FetchAsync,
 }
 
-impl GoeffApi {
+impl GoeffApiAsync {
     pub fn new(cx: Context) -> Self {
         Self {
-            fetch: FetchApi::new(cx.window().clone(), "api"),
+            fetch: FetchAsync::new(cx.window().clone(), "api"),
         }
     }
 

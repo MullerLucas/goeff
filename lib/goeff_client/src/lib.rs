@@ -2,9 +2,8 @@ mod view;
 mod api;
 mod state;
 
-use goeff_core::data::GoeffChatRequest;
 use hell_core::error::HellResult;
-use hell_mod_web_client::{console_warn, utils, view::{Element, ElementContainer}};
+use hell_mod_web_client::{utils, view::{Element, ElementContainer}};
 use wasm_bindgen::prelude::*;
 
 use crate::state::GoeffClientState;
@@ -42,16 +41,8 @@ async fn run_hell() -> HellResult<()> {
     content.add_class("content")?;
     page.append_child(&content)?;
 
-    let chat = view::chat::create_chat(cx)?;
+    let chat = view::chat::create_chat(state)?;
     content.append_child(&chat)?;
-
-    let val = state.api().query_modells().await?;
-    console_warn!("TEST: {:?}", val);
-
-    let val = state.api().process_chat(& GoeffChatRequest {
-        msg: "How tall ist the Eiffel Tower?".to_string()
-    }).await?;
-    console_warn!("TEST: {:?}", val);
 
     utils::wait_for_end_of_universe().await.unwrap();
     Ok(())
