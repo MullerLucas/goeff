@@ -1,23 +1,23 @@
-use hell_mod_llm::{llm::chat::{LlmChatSuccessResponse, LlmChatMessage}};
+use hell_mod_llm::llm::chat::{LlmChatSuccessResponse, LlmChatMessage};
 
 // ----------------------------------------------------------------------------
 
-#[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct GoeffChatRequest {
-    pub msg: String,
+    pub messages: Vec<LlmChatMessage>,
 }
 
 // ----------------------------------------------------------------------------
 
-#[derive(Debug, serde:: Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, serde:: Serialize, serde::Deserialize)]
 pub struct GoeffChatResponse {
-    pub mgs: LlmChatMessage,
+    pub messages: Vec<LlmChatMessage>,
 }
 
 impl From<LlmChatSuccessResponse> for GoeffChatResponse {
-    fn from(mut val: LlmChatSuccessResponse) -> Self {
+    fn from(val: LlmChatSuccessResponse) -> Self {
         Self {
-            mgs: val.messages.remove(0),
+            messages: val.messages,
         }
     }
 }

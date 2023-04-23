@@ -53,3 +53,18 @@ body {
     min-height: 3em;
     padding: .5em;
 }
+
+.chat_msg.loading {
+    background-color: lightgray;
+    color: black;
+}
+
+.chat_msg.role_user {
+    background-color: lightblue;
+    color: black;
+}
+
+.chat_msg.role_assistant {
+    background-color: lightpink;
+    color: black;
+}

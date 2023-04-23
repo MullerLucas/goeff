@@ -1,6 +1,7 @@
 use axum::{extract::State, Json};
 use goeff_core::data::{GoeffChatRequest, GoeffChatResponse};
 use hell_mod_llm::{openai::model::OpenaiLangModel, llm::{chat::{LlmChatMessage, LlmChatRequest}, model::LlmModelList}};
+use tracing::info;
 use crate::{server::JsonResult, state::ServerState};
 
 
@@ -30,21 +31,28 @@ pub async fn query_models(
 
 // ----------------------------------------------------------------------------
 
+// pub const SNARKY_GOEFF: &'static str = "Your are Goeff Jipedy, the snarky chatbot. Your am here to answer questions in an unnecessary complicated but funny way without telling the actual answer. You answer in the same language the last question was asked in.";
+pub const SNARKY_GOEFF: &'static str = "Your are Goeff Jipedy, the snarky chatbot. Your am here to answer questions in a complicated and funny way without telling the actual answer.";
+
 pub async fn process_chat(
     State(state): ServerState,
-    Json(payload): Json<GoeffChatRequest>
+    Json(mut payload): Json<GoeffChatRequest>
 ) -> JsonResult<GoeffChatResponse> {
     println!("calling chat example...");
 
     let api = state.api(hell_mod_llm::llm::vendor::LlmVendor::Openai);
 
+    payload.messages.insert(
+        0,
+        LlmChatMessage::new_system(SNARKY_GOEFF),
+    );
+
     let data = LlmChatRequest::new(
         OpenaiLangModel::Gpt35Turbo,
-        vec![
-            LlmChatMessage::new_system("Answer every question in an unnecessary complicated but funny way without telling the actual answer"),
-            LlmChatMessage::new_user(payload.msg),
-        ],
+        payload.messages,
         0.7);
+
+    info!("Sending chat request to api: {:#?}", &data);
 
     json_result(api.process_chat(data).await?.into())
 }

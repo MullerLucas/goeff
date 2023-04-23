@@ -1,5 +1,6 @@
 use goeff_core::data::GoeffChatRequest;
 use hell_core::error::HellResult;
+use hell_mod_llm::llm::{chat::LlmChatMessage, role::LlmChatRole};
 use hell_mod_web_client::{view::{Element, ElementContainer}, console_info};
 use wasm_bindgen_futures::spawn_local;
 use crate::state::State;
@@ -31,39 +32,84 @@ pub fn create_chat(state: State) -> HellResult<Element> {
     input_send_btn.set_text_content(Some("Send"));
     input_box.append_child(&input_send_btn)?;
 
+    let chat_data = cx.create_signal::<Vec<LlmChatMessage>>(Vec::new());
+
     input_send_btn.add_event_listener("click", move || {
+        // TODO (lm): figure out why copy does not work
+        let chat_data = chat_data.clone();
+
         spawn_local(async move {
             let mut output_box = output_box_h.get();
             let input_field = input_field_h.get().to_input();
-
-            let txt = input_field.value();
             console_info!("send button clicked ...");
 
-            let mut msg = create_chat_msg(state, &txt).expect("failed to create chat-msg");
-            msg.add_class_uncheckd("chat_msg_user");
-            output_box.append_child(&msg).expect("failed to append chat-msg");
+            // append new user message
+            let user_input = input_field.value();
+            let user_msg = create_user_chat_msg(state, &user_input).unwrap();
+            output_box.append_child(&user_msg).unwrap();
 
-            let mut assistant_msg = create_chat_msg(state, "...").expect("failed to create chat-msg");
-            output_box.append_child(&assistant_msg).expect("failed to append chat-msg");
+            chat_data.with_mut(|msg| {
+                msg.push(LlmChatMessage::new_user(&user_input));
+            });
 
-            let request = GoeffChatRequest { msg: txt, };
+            // creating empty loading box, until assistant response returnded
+            let mut assistant_msg_elem = create_loading_chat_msg(state).expect("failed to create chat-msg");
+            output_box.append_child(&assistant_msg_elem).expect("failed to append chat-msg");
+
+            // process chat
+            let request = GoeffChatRequest { messages: chat_data.get(), };
+            console_info!("Chat-Request: {:?}", &request);
             let response = state.api().process_chat(&request).await.unwrap();
             console_info!("Chat-Response: {:?}", response);
 
-            assistant_msg.set_text_content(Some(&response.mgs.content));
+            chat_data.with_mut(|data| {
+                // TODO (lm): don't clone
+                for msg in response.messages.clone() {
+                    data.push(msg);
+                }
+            });
 
-            assistant_msg.add_class_uncheckd("chat_msg_assistant");
+            // update empty assistant box
+            for msg in &response.messages {
+                update_loading_chat_msg_with_data(state, &mut assistant_msg_elem, msg).unwrap();
+            }
+
         });
     })?;
 
     Ok(chat)
 }
 
-pub fn create_chat_msg(state: State, txt: &str) -> HellResult<Element> {
+pub fn create_user_chat_msg(state: State, user_input: &str) -> HellResult<Element> {
     let cx = state.cx();
 
     let (mut msg, _) = Element::create_div(cx)?;
     msg.add_class("chat_msg")?;
-    msg.set_text_content(Some(txt));
+    msg.add_class(get_class_for_role(LlmChatRole::User))?;
+    msg.set_text_content(Some(user_input));
     Ok(msg)
+}
+
+pub fn create_loading_chat_msg(state: State) -> HellResult<Element> {
+    let (mut msg, _) = Element::create_div(state.cx())?;
+    msg.add_class("chat_msg")?;
+    msg.add_class("loading")?;
+    msg.set_text_content(Some("..."));
+    Ok(msg)
+}
+
+pub fn update_loading_chat_msg_with_data(_state: State, msg: &mut Element, data: &LlmChatMessage) -> HellResult<()> {
+    msg.remove_class("loading")?;
+    msg.add_class(get_class_for_role(data.role))?;
+    msg.set_text_content(Some(&data.content));
+
+    Ok(())
+}
+
+pub fn get_class_for_role(role: LlmChatRole) -> &'static str {
+    match role {
+        LlmChatRole::System => "role_system",
+        LlmChatRole::Assistant => "role_assistant",
+        LlmChatRole::User => "role_user",
+    }
 }
