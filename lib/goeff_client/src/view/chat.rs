@@ -2,7 +2,9 @@ use goeff_core::data::GoeffChatRequest;
 use hell_core::error::HellResult;
 use hell_mod_llm::llm::{chat::LlmChatMessage, role::LlmChatRole};
 use hell_mod_web_client::{view::{Element, ElementContainer}, console_info};
+use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::spawn_local;
+use web_sys::KeyboardEvent;
 use crate::state::State;
 
 
@@ -25,6 +27,7 @@ pub fn create_chat(state: State) -> HellResult<Element> {
     let (mut input_field, input_field_h) = Element::create_input(cx)?;
     input_field.add_class("chat_input_field")?;
     input_field.set_attribute("type", "text")?;
+    input_field.set_attribute("autofocus", "true")?;
     input_box.append_child(&input_field)?;
 
     let (mut input_send_btn, _) = Element::create_button(cx)?;
@@ -34,17 +37,19 @@ pub fn create_chat(state: State) -> HellResult<Element> {
 
     let chat_data = cx.create_signal::<Vec<LlmChatMessage>>(Vec::new());
 
-    input_send_btn.add_event_listener("click", move || {
+    input_send_btn.add_event_listener("click", move |_| {
         // TODO (lm): figure out why copy does not work
         let chat_data = chat_data.clone();
 
         spawn_local(async move {
             let mut output_box = output_box_h.get();
-            let input_field = input_field_h.get().to_input();
+            let mut input_field = input_field_h.get().to_input();
             console_info!("send button clicked ...");
 
             // append new user message
             let user_input = input_field.value();
+            input_field.set_value("");
+
             let user_msg = create_user_chat_msg(state, &user_input).unwrap();
             output_box.append_child(&user_msg).unwrap();
 
@@ -73,9 +78,18 @@ pub fn create_chat(state: State) -> HellResult<Element> {
             for msg in &response.messages {
                 update_loading_chat_msg_with_data(state, &mut assistant_msg_elem, msg).unwrap();
             }
-
         });
     })?;
+
+    input_field.add_event_listener("keydown", move |e| {
+        let event: KeyboardEvent = e.dyn_into().unwrap();
+        // if enter was pressed
+        if event.key_code() == 13 {
+            console_info!("auto-click");
+            input_send_btn.click();
+        }
+    })?;
+
 
     Ok(chat)
 }

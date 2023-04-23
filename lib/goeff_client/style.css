@@ -5,7 +5,6 @@
 body {
     height: 100vh;
     height: 100dvh;
-    /* background-color: #222222; */
     background: linear-gradient(#222222, #000000);
     margin: 0;
 }
@@ -20,9 +19,7 @@ body {
     margin-bottom: 0;
 }
 
-.main_subtitle {
-
-}
+/* .main_subtitle { } */
 
 .page {
     display: grid;
@@ -48,8 +45,6 @@ body {
 }
 
 .chat_output_box {
-    /* border: 2px solid black; */
-    /* background-color: white; */
     padding: 1em;
 
     flex-grow: 1;
