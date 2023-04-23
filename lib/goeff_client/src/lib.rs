@@ -1,7 +1,8 @@
 mod view;
 
 use hell_core::error::HellResult;
-use hell_mod_web_client::{view::{Context, Element, ElementContainer}, console_warn, fetch::FetchApi};
+use hell_mod_llm::llm::model::LlmModelList;
+use hell_mod_web_client::{view::{Context, Element, ElementContainer}, console_warn, utils};
 use wasm_bindgen::prelude::*;
 
 
@@ -38,15 +39,13 @@ async fn run_hell() -> HellResult<()> {
     let chat = view::chat::create_chat(cx)?;
     content.append_child(&chat)?;
 
-    console_warn!("test");
-    let js_val = FetchApi::get().await;
-    console_warn!("TEST: {:?}", js_val);
+    let val: LlmModelList = cx.fetch().get("models").await?;
+    console_warn!("TEST: {:?}", val);
 
-    wait_for_end_of_universe().await.unwrap();
+    // let body = GoeffChatRequest { };
+    // let val: LlmChatSuccessResponse = cx.fetch().post("chat", &body).await?;
+    // console_warn!("TEST: {:?}", val);
+
+    utils::wait_for_end_of_universe().await.unwrap();
     Ok(())
-}
-
-fn wait_for_end_of_universe() -> wasm_bindgen_futures::JsFuture {
-    let promise = js_sys::Promise::new(&mut |_resolve, _reject| { });
-    wasm_bindgen_futures::JsFuture::from(promise)
 }

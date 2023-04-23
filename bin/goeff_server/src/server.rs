@@ -12,10 +12,9 @@ pub type JsonResult<R> = HellResult<axum::Json<R>>;
 
 pub async fn run_server() -> HellResult<()> {
     let app = Router::new()
-        .route("/",       get(root))
+        .route("/api/",       get(root))
         .route("/api/models", get(query_models))
-        .route("/test", get(query_models))
-        .route("/chat",   post(process_chat))
+        .route("/api/chat",   post(process_chat))
         .with_state(GoeffServerState::new());
 
     // let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

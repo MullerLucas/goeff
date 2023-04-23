@@ -11,6 +11,7 @@ crate-type = [ "cdylib" ]
 [dependencies]
 hell_core.workspace = true
 hell_mod_web_client.workspace = true
+hell_mod_llm.workspace = true
 
 web-sys.workspace = true
 js-sys.workspace = true

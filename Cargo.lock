@@ -249,6 +249,7 @@ name = "goeff_client"
 version = "0.1.0"
 dependencies = [
  "hell_core",
+ "hell_mod_llm",
  "hell_mod_web_client",
  "js-sys",
  "wasm-bindgen",
@@ -323,6 +324,9 @@ dependencies = [
  "hell_core",
  "js-sys",
  "paste",
+ "serde",
+ "serde-wasm-bindgen",
+ "serde_json",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
@@ -853,6 +857,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bb2f3770c8bce3bcda7e149193a069a0f4365bda1fa5cd88e03bca26afc1216c"
 dependencies = [
  "serde_derive",
+]
+
+[[package]]
+name = "serde-wasm-bindgen"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f3b143e2833c57ab9ad3ea280d21fd34e285a42837aeb0ee301f4f41890fa00e"
+dependencies = [
+ "js-sys",
+ "serde",
+ "wasm-bindgen",
 ]
 
 [[package]]
