@@ -1,0 +1,64 @@
+#!/bin/sh
+
+orig_dir=$(pwd)
+sh_dir=$(dirname $0)
+docker_dir="$sh_dir/build_dist_data"
+
+dist_dir="$sh_dir/../dist"
+dist_server_dir="$dist_dir/server"
+dist_client_dir="$dist_dir/client"
+target_server_dir="$sh_dir/../target/release"
+src_client_dir="$sh_dir/../lib/goeff_client"
+
+
+clean_dist() {
+    echo "clean dist-dir ..."
+    [ -d "$dist_dir" ] && rm -rf "${dist_dir:?}"
+    mkdir -p "$dist_dir"
+    mkdir "$dist_server_dir"
+    mkdir "$dist_client_dir"
+}
+
+build_server() {
+    echo "clean target-dir ..."
+    [ -d "$target_server_dir" ] && rm -rf "${target_server_dir:?}"
+
+    echo "entering tool dir..."
+    cd "$docker_dir" || exit 1
+
+    echo "starting docker service..."
+    sudo systemctl start docker || exit 1
+
+    echo "building api-server ..."
+    sudo docker compose up --build
+
+    echo "returning to original dir..."
+    cd "$orig_dir" || exit 1
+
+    echo "copy api-server to dist ..."
+    sudo chown -R $USER:$USER "$target_server_dir"
+    mv "$target_server_dir/goeff_server" "$dist_server_dir/goeff_server"
+}
+
+build_client() {
+    echo "clean pkg-dir ..."
+    [ -d "$src_client_dir/pkg" ] && rm -rf "${src_client_dir?}/pkg"
+
+    echo "entering client-src dir ..."
+    cd "$src_client_dir" || exit 1
+
+    echo "building client ..."
+    wasm-pack build --release --target web
+
+    echo "returning to orig-dir ..."
+    cd "$orig_dir" || exit 1
+
+    echo "moving output files ..."
+    cp -r "$src_client_dir/pkg" "$src_client_dir/styles" "$src_client_dir/index.html" "$src_client_dir/index.js" "$dist_client_dir/"
+}
+
+
+
+clean_dist
+build_server
+build_client

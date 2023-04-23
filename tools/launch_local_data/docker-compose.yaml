@@ -8,12 +8,6 @@ services:
       - "443:443"
     restart: "no"
     volumes:
-      - ../lib/goeff_client:/var/www/hellmut_client
+      - ../../lib/goeff_client:/hellmut/client
     extra_hosts:
     - "host.docker.internal:host-gateway"
-
-  # goeff_api_server:
-  #   build: ./api_server
-  #   restart: "no"
-  #   volumes:
-  #     - ../target/debug:/var/www/hellmut_server

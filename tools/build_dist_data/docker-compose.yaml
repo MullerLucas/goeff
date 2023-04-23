@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  build_api_server:
+    build: ./api_server
+    restart: "no"
+    volumes:
+      - ../../:/hellmut/server
