@@ -22,6 +22,12 @@ hell_core           = { path = "./hellmut/lib/hell_core" }
 hell_mod_web_client = { path = "./hellmut/lib/hell_mod_web_client" }
 hell_mod_llm        = { path = "./hellmut/lib/hell_mod_llm" }
 
+# goeff
+# -----
+goeff_core   = { path = "./lib/goeff_core" }
+goeff_client = { path = "./lib/goeff_client" }
+goeff_server = { path = "./main/goeff_server" }
+
 # extern
 # ------
 wasm-bindgen             = "0.2.84"

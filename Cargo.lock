@@ -248,6 +248,7 @@ dependencies = [
 name = "goeff_client"
 version = "0.1.0"
 dependencies = [
+ "goeff_core",
  "hell_core",
  "hell_mod_llm",
  "hell_mod_web_client",
@@ -258,11 +259,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "goeff_core"
+version = "0.1.0"
+dependencies = [
+ "hell_core",
+ "hell_mod_llm",
+ "serde",
+]
+
+[[package]]
 name = "goeff_server"
 version = "0.1.0"
 dependencies = [
  "axum",
  "dotenv",
+ "goeff_core",
  "hell_core",
  "hell_mod_llm",
  "serde",

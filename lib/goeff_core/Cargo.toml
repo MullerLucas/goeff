@@ -1,0 +1,11 @@
+[package]
+name = "goeff_core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+hell_core.workspace = true
+hell_mod_llm.workspace = true
+# extern
+serde.workspace = true

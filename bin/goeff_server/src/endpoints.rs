@@ -1,5 +1,6 @@
 use axum::{extract::State, Json};
-use hell_mod_llm::{openai::{model::OpenaiLangModel, chat::{OpenaiChatMessage, OpenaiChatSuccessResponse}}, llm::{chat::{LlmChatMessage, LlmChatRequest, LlmChatSuccessResponse}, model::LlmModelList}};
+use goeff_core::data::{GoeffChatRequest, GoeffChatResponse};
+use hell_mod_llm::{openai::model::OpenaiLangModel, llm::{chat::{LlmChatMessage, LlmChatRequest, LlmChatSuccessResponse}, model::LlmModelList}};
 use crate::{server::JsonResult, state::ServerState};
 
 
@@ -29,30 +30,10 @@ pub async fn query_models(
 
 // ----------------------------------------------------------------------------
 
-#[derive(Debug, serde::Deserialize)]
-pub struct GoeffChatRequest {
-    pub msg: String,
-}
-
-#[derive(Debug, serde:: Serialize)]
-pub struct GoeffChatResponse {
-    pub message: OpenaiChatMessage,
-    pub total_tokens: u32,
-}
-
-impl From<OpenaiChatSuccessResponse> for GoeffChatResponse {
-    fn from(mut val: OpenaiChatSuccessResponse) -> Self {
-        Self {
-            message: val.choices.remove(0).message,
-            total_tokens: val.usage.total_tokens,
-        }
-    }
-}
-
 pub async fn process_chat(
     State(state): ServerState,
     Json(payload): Json<GoeffChatRequest>
-) -> JsonResult<LlmChatSuccessResponse> {
+) -> JsonResult<GoeffChatResponse> {
     println!("calling chat example...");
 
     let api = state.api(hell_mod_llm::llm::vendor::LlmVendor::Openai);
@@ -65,7 +46,7 @@ pub async fn process_chat(
         ],
         0.7);
 
-    json_result(api.process_chat(data).await?)
+    json_result(api.process_chat(data).await?.into())
 }
 
 // ----------------------------------------------------------------------------

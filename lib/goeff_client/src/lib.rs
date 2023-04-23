@@ -1,9 +1,13 @@
 mod view;
+mod api;
+mod state;
 
+use goeff_core::data::GoeffChatRequest;
 use hell_core::error::HellResult;
-use hell_mod_llm::llm::model::LlmModelList;
-use hell_mod_web_client::{view::{Context, Element, ElementContainer}, console_warn, utils};
+use hell_mod_web_client::{console_warn, utils, view::{Element, ElementContainer}};
 use wasm_bindgen::prelude::*;
+
+use crate::state::GoeffClientState;
 
 
 
@@ -25,7 +29,9 @@ pub fn version_number() -> String {
 async fn run_hell() -> HellResult<()> {
     hell_mod_web_client::logging::init_logging();
 
-    let cx = Context::new();
+    let state = GoeffClientState::new();
+    let cx = state.cx();
+
     let (mut body, _) = Element::create_body(cx)?;
 
     let (mut page, _) = Element::create_div(cx)?;
@@ -39,12 +45,13 @@ async fn run_hell() -> HellResult<()> {
     let chat = view::chat::create_chat(cx)?;
     content.append_child(&chat)?;
 
-    let val: LlmModelList = cx.fetch().get("models").await?;
+    let val = state.api().query_modells().await?;
     console_warn!("TEST: {:?}", val);
 
-    // let body = GoeffChatRequest { };
-    // let val: LlmChatSuccessResponse = cx.fetch().post("chat", &body).await?;
-    // console_warn!("TEST: {:?}", val);
+    let val = state.api().process_chat(& GoeffChatRequest {
+        msg: "How tall ist the Eiffel Tower?".to_string()
+    }).await?;
+    console_warn!("TEST: {:?}", val);
 
     utils::wait_for_end_of_universe().await.unwrap();
     Ok(())

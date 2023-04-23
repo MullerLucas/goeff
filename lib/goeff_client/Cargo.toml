@@ -9,9 +9,12 @@ authors.workspace = true
 crate-type = [ "cdylib" ]
 
 [dependencies]
+# hellmut
 hell_core.workspace = true
 hell_mod_web_client.workspace = true
 hell_mod_llm.workspace = true
+# goeff
+goeff_core.workspace = true
 
 web-sys.workspace = true
 js-sys.workspace = true

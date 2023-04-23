@@ -5,8 +5,11 @@ edition.workspace = true
 authors.workspace = true
 
 [dependencies]
+# hellmut
 hell_core    = { workspace = true, features = ["axum"] }
 hell_mod_llm = { workspace = true, features = ["server"] }
+# goeff
+goeff_core.workspace = true
 
 axum.workspace = true
 dotenv.workspace = true
