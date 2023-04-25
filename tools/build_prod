@@ -4,7 +4,7 @@ orig_dir=$(pwd)
 sh_dir=$(dirname $0)
 docker_dir="$sh_dir/build_dist_data"
 
-dist_dir="$sh_dir/../dist"
+dist_dir="$sh_dir/../dist/prod/data"
 dist_server_dir="$dist_dir/server"
 dist_client_dir="$dist_dir/client"
 target_server_dir="$sh_dir/../target/release"

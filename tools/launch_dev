@@ -1,0 +1,5 @@
+#!/bin/sh
+
+SH_DIR=$(dirname $0)
+CMD_LAUNCH="$SH_DIR/launch_data/launch.sh -e dev"
+eval "$CMD_LAUNCH" || exit 1
