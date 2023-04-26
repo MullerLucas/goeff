@@ -28,6 +28,7 @@ pub fn create_chat(state: State) -> HellResult<Element> {
     input_field.add_class("chat_input_field")?;
     input_field.set_attribute("type", "text")?;
     input_field.set_attribute("autofocus", "true")?;
+    input_field.set_attribute("placeholder", "(use english, for best results ...)")?;
     input_box.append_child(&input_field)?;
 
     let (mut input_send_btn, _) = Element::create_button(cx)?;

@@ -1,4 +1,5 @@
 target
-dist
+# TODO
+dist/prod/data
 .idea
 .env

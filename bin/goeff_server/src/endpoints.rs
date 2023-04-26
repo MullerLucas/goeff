@@ -31,8 +31,7 @@ pub async fn query_models(
 
 // ----------------------------------------------------------------------------
 
-// pub const SNARKY_GOEFF: &'static str = "Your are Goeff Jipedy, the snarky chatbot. Your am here to answer questions in an unnecessary complicated but funny way without telling the actual answer. You answer in the same language the last question was asked in.";
-pub const SNARKY_GOEFF: &'static str = "Your are Goeff Jipedy, the snarky chatbot. Your am here to answer questions in a complicated and funny way without telling the actual answer.";
+pub const SNARKY_GOEFF: &'static str = "Your are Goeff Jipedy, the snarky chatbot. Your am here to answer questions in an unnecessary complicated but funny way without telling the actual answer.";
 
 pub async fn process_chat(
     State(state): ServerState,
@@ -42,9 +41,11 @@ pub async fn process_chat(
 
     let api = state.api(hell_mod_llm::llm::vendor::LlmVendor::Openai);
 
+    let system_msg = std::env::var("CHAT_SYSTEM_MSG").unwrap_or_else(|_| SNARKY_GOEFF.to_string());
+
     payload.messages.insert(
         0,
-        LlmChatMessage::new_system(SNARKY_GOEFF),
+        LlmChatMessage::new_system(system_msg),
     );
 
     let data = LlmChatRequest::new(

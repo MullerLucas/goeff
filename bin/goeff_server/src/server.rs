@@ -1,4 +1,4 @@
-use std::net::SocketAddr;
+use std::{net::{SocketAddr, IpAddr}, str::FromStr};
 use axum::{Router, routing::{get, post}};
 use hell_core::error::HellResult;
 
@@ -17,9 +17,8 @@ pub async fn run_server() -> HellResult<()> {
         .route("/api/chat",   post(process_chat))
         .with_state(GoeffServerState::new());
 
-    // let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    // NOTE (lm): docher host addr
-    let addr = SocketAddr::from(([172, 17, 0, 1], 3000));
+    let url = std::env::var("API_URL").unwrap();
+    let addr = SocketAddr::from_str(&url).unwrap();
     println!("running server on addr '{:?}'", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
