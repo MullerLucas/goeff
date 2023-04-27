@@ -32,7 +32,7 @@ echo "starting docker service..."
 sudo systemctl start docker || exit 1
 
 echo "starting docker containers..."
-sudo docker compose up --build
+sudo docker compose -f "$COMPOSE_FILE" --project-directory "$SH_DIR" up --build
 
 echo "returning to original dir..."
 cd "$orig_dir" || exit 1
