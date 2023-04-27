@@ -31,27 +31,27 @@ async fn run_hell() -> HellResult<()> {
     let state = GoeffClientState::new();
     let cx = state.cx();
 
-    let (mut body, _) = Element::create_body(cx)?;
+    let mut body = Element::create_body(cx)?.get();
 
-    let (mut page, _) = Element::create_div(cx)?;
+    let mut page = Element::create_div(cx)?.get();
     page.add_class("page")?;
     body.append_child(&page)?;
 
-    let (mut content, _) = Element::create_div(cx)?;
+    let mut content = Element::create_div(cx)?.get();
     content.add_class("content")?;
     page.append_child(&content)?;
 
-    let (mut header, _) = Element::create_div(cx)?;
+    let mut header = Element::create_div(cx)?.get();
     header.add_class("header")?;
     content.append_child(&header)?;
 
-    let (mut title, _) = Element::create_h1(cx)?;
+    let mut title = Element::create_h1(cx)?.get();
     title.add_class("main_text")?;
     title.add_class("main_title")?;
     title.set_text_content(Some("Goeff Jipedy"));
     header.append_child(&title)?;
 
-    let (mut subtitle, _) = Element::create_h4(cx)?;
+    let mut subtitle = Element::create_h4(cx)?.get();
     subtitle.add_class("main_text")?;
     subtitle.add_class("main_subtitle")?;
     subtitle.set_text_content(Some("Powered by Hellmut"));

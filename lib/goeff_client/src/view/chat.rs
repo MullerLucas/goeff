@@ -13,25 +13,27 @@ use crate::state::State;
 pub fn create_chat(state: State) -> HellResult<Element> {
     let cx = state.cx();
 
-    let (mut chat, _) = Element::create_div(cx)?;
+    let mut chat = Element::create_div(cx)?.get();
     chat.add_class("chat")?;
 
-    let (mut output_box, output_box_h)= Element::create_div(cx)?;
+    let output_box_h = Element::create_div(cx)?;
+    let mut output_box = output_box_h.get();
     output_box.add_class("chat_output_box")?;
     chat.append_child(&output_box)?;
 
-    let (mut input_box, _) = Element::create_div(cx)?;
+    let mut input_box = Element::create_div(cx)?.get();
     input_box.add_class("chat_input_box")?;
     chat.append_child(&input_box)?;
 
-    let (mut input_field, input_field_h) = Element::create_input(cx)?;
+    let input_field_h = Element::create_input(cx)?;
+    let mut input_field = input_field_h.get();
     input_field.add_class("chat_input_field")?;
     input_field.set_attribute("type", "text")?;
     input_field.set_attribute("autofocus", "true")?;
     input_field.set_attribute("placeholder", "(use english, for best results ...)")?;
     input_box.append_child(&input_field)?;
 
-    let (mut input_send_btn, _) = Element::create_button(cx)?;
+    let mut input_send_btn = Element::create_button(cx)?.get();
     input_send_btn.add_class("chat_input_send_btn")?;
     input_send_btn.set_text_content(Some("Send"));
     input_box.append_child(&input_send_btn)?;
@@ -39,12 +41,9 @@ pub fn create_chat(state: State) -> HellResult<Element> {
     let chat_data = cx.create_signal::<Vec<LlmChatMessage>>(Vec::new());
 
     input_send_btn.add_event_listener("click", move |_| {
-        // TODO (lm): figure out why copy does not work
-        let chat_data = chat_data.clone();
-
         spawn_local(async move {
             let mut output_box = output_box_h.get();
-            let mut input_field = input_field_h.get().to_input();
+            let mut input_field = input_field_h.get();
             console_info!("send button clicked ...");
 
             // append new user message
@@ -98,7 +97,7 @@ pub fn create_chat(state: State) -> HellResult<Element> {
 pub fn create_user_chat_msg(state: State, user_input: &str) -> HellResult<Element> {
     let cx = state.cx();
 
-    let (mut msg, _) = Element::create_div(cx)?;
+    let mut msg = Element::create_div(cx)?.get();
     msg.add_class("chat_msg")?;
     msg.add_class(get_class_for_role(LlmChatRole::User))?;
     msg.set_text_content(Some(user_input));
@@ -106,7 +105,7 @@ pub fn create_user_chat_msg(state: State, user_input: &str) -> HellResult<Elemen
 }
 
 pub fn create_loading_chat_msg(state: State) -> HellResult<Element> {
-    let (mut msg, _) = Element::create_div(state.cx())?;
+    let mut msg = Element::create_div(state.cx())?.get();
     msg.add_class("chat_msg")?;
     msg.add_class("loading")?;
     msg.set_text_content(Some("..."));
