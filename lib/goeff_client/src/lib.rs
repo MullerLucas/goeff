@@ -57,7 +57,7 @@ async fn run_hell() -> HellResult<()> {
     subtitle.set_text_content(Some("Powered by Hellmut"));
     header.append_child(&subtitle)?;
 
-    let chat = view::chat::create_chat(state)?;
+    let chat = view::chat::create_chat(state).await?;
     content.append_child(&chat)?;
 
     utils::wait_for_end_of_universe().await.unwrap();
