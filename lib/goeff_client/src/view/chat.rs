@@ -15,7 +15,6 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
     let chat = Element::create_div(cx)?;
     let mut chat_elem = chat.get();
     chat_elem.add_class("chat")?;
-    chat_elem.js_element().set_id("test");
 
     let output_box_h = Element::create_div(cx)?;
     let mut output_box = output_box_h.get();
