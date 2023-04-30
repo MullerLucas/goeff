@@ -1,85 +1,19 @@
-/* @hell-parse */
-.content {
-    width: min(max(30em, 50%), 70em);
-    padding-bottom: 2rem;
-    display: flex;
-    flex-direction: column;
+:root {
+    --bg-primary-400: #eeeeee;
+    --bg-secondary-400: #222222;
+    --bg-accent1-400: #9ab4e6;
+    --bg-accent2-400: #c9a8d5;
+
+    --text-primary-400: #222222;
+    --text-secondary-400: #eeeeee;
+    --text-accent1-400: #222222;
+    --text-accent2-400: #222222;
+
+    --border-primary-400: #222222;
+    --border-secondary-400: #eee;
+    --border-accent1-400: #222;
+    --border-accent2-400: #222;
 }
 
-/* @hell-parse */
-.chat {
-    height: 100%;
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
-}
-
-/* @hell-parse */
-.chat_output_box {
-    padding: 1em;
-
-    flex-grow: 1;
-    max-height: 90%;
-    overflow-y: hidden;
-
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-}
-
-/* send button  */
-/* -----------  */
-.chat_input_send_btn {
-    border-radius: var(--border_radius);
-    border: 0;
-    background-color: var(--col_user_400);
-}
-
-.chat_input_send_btn[disabled] {
-    background-color: var(--col_temp_400);
-    opacity: 0.5;
-}
-
-/* .chat_state_waiting_for_user_input .chat_input_send_btn { */
-/**/
-/* } */
-
-.chat_msg {
-    background-color: lightblue;
-    padding: 1em;
-    position: relative;
-
-    border-radius: var(--border_radius);
-    background-color: var(--chat_role_color_bg);
-    color: var(--chat_role_color_fg);
-}
-
-.chat_msg::before {
-    content: "";
-    position: absolute;
-    border-width: 10px;
-    border-style: solid;
-    border-color: var(--chat_role_color_bg) transparent transparent transparent;
-    left: var(--chat_role_corner_pos_left);
-    top: 0;
-}
-
-.chat_msg.role_temp {
-    --chat_role_color_bg: var(--col_temp_400);
-    --chat_role_color_fg: black;
-    --chat_role_corner_pos_left: calc(100% - 10px);
-}
-
-.chat_msg.role_assistant {
-    --chat_role_color_bg: var(--col_assistant_400);
-    --chat_role_color_fg: black;
-    --chat_role_corner_pos_left: calc(100% - 10px);
-}
-
-.chat_msg.role_user {
-    --chat_role_color_bg: var(--col_user_400);
-    --chat_role_color_fg: black;
-    --chat_role_corner_pos_left: -10px
-}
+#header { }
+#footer { }

@@ -1,2 +1,5 @@
 pub mod chat;
-pub mod style;
+pub mod ident;
+
+pub mod header;
+pub mod footer;

@@ -4,15 +4,15 @@ SH_DIR=$(dirname "$0")
 APP="$SH_DIR/../../hector/css_parser/css_parser"
 
 HELL_CSS_FILE="$SH_DIR/../hellmut/lib/hell_mod_web_client/styles/hell.css"
-HELL_RS_FILE="$SH_DIR/../hellmut/lib/hell_mod_web_client/src/view/style/hell.rs"
+HELL_RS_FILE="$SH_DIR/../hellmut/lib/hell_mod_web_client/src/view/ident/hell_style.rs"
 HELL_LIB_FILE="$SH_DIR/../lib/goeff_client/styles/hell.css"
-PARSE_HELL="$APP $HELL_CSS_FILE $HELL_RS_FILE HellStyle"
 
-eval "$PARSE_HELL"
+./$APP $HELL_CSS_FILE $HELL_RS_FILE "HellStyle" "."
 cp "$HELL_CSS_FILE" "$HELL_LIB_FILE"
 
 GOEFF_CSS_FILE="$SH_DIR/../lib/goeff_client/styles/goeff.css"
-GOEFF_RS_FILE="$SH_DIR/../lib/goeff_client/src/view/style/goeff.rs"
-PARSE_GOEFF="$APP $GOEFF_CSS_FILE $GOEFF_RS_FILE GoeffStyle"
+GOEFF_RS_FILE="$SH_DIR/../lib/goeff_client/src/view/ident/goeff_style.rs"
+./$APP $GOEFF_CSS_FILE $GOEFF_RS_FILE "GoeffStyle" "."
 
-eval "$PARSE_GOEFF"
+GOEFF_RS_FILE="$SH_DIR/../lib/goeff_client/src/view/ident/goeff_id.rs"
+./$APP $GOEFF_CSS_FILE $GOEFF_RS_FILE "GoeffId" "#"

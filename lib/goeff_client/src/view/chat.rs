@@ -1,6 +1,6 @@
 use goeff_core::data::{GoeffChatMsg, GoeffChatRole, GoeffChatState};
 use hell_core::error::HellResult;
-use hell_mod_web_client::{view::{Element, ElementContainer, style::HellStyle}, console_info, console_log, console_warn};
+use hell_mod_web_client::{view::{Element, ElementContainer, ident::HellStyle}, console_info, console_log, console_warn};
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::KeyboardEvent;
@@ -12,18 +12,23 @@ use crate::state::State;
 pub async fn create_chat(state: State) -> HellResult<Element> {
     let cx = state.cx();
 
-    let chat = Element::create_div(cx)?;
-    let mut chat_elem = chat.get();
-    chat_elem.add_class(HellStyle::W_0)?;
+    let chat_h = Element::create_div(cx)?;
+    let mut chat = chat_h.get();
+    chat.add_classes(&[
+        HellStyle::w_full,
+        HellStyle::flex,
+        HellStyle::flex_col,
+        HellStyle::items_center,
+    ])?;
 
     let output_box_h = Element::create_div(cx)?;
     let mut output_box = output_box_h.get();
     output_box.add_class("chat_output_box")?;
-    chat_elem.append_child(&output_box)?;
+    chat.append_child(&output_box)?;
 
     let mut input_box = Element::create_div(cx)?.get();
     input_box.add_class("chat_input_box")?;
-    chat_elem.append_child(&input_box)?;
+    chat.append_child(&input_box)?;
 
     let input_field_h = Element::create_input(cx)?;
     let mut input_field = input_field_h.get();
@@ -48,7 +53,7 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
         let chat_state = chat_state.get();
         console_log!("[CHAT]: chat state changed to '{:?}'", chat_state);
 
-        let mut chat_elem = chat.get();
+        let mut chat_elem = chat_h.get();
         chat_elem.remove_classes(&[
             get_class_chat_state(GoeffChatState::Initializing),
             get_class_chat_state(GoeffChatState::WaitingForUserInput),
@@ -126,7 +131,7 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
         }
     })?;
 
-    Ok(chat_elem)
+    Ok(chat)
 }
 
 
