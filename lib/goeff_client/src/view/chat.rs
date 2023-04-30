@@ -1,6 +1,6 @@
 use goeff_core::data::{GoeffChatMsg, GoeffChatRole, GoeffChatState};
 use hell_core::error::HellResult;
-use hell_mod_web_client::{view::{Element, ElementContainer}, console_info, console_log, console_warn};
+use hell_mod_web_client::{view::{Element, ElementContainer, style::HellStyle}, console_info, console_log, console_warn};
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::KeyboardEvent;
@@ -14,7 +14,7 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
 
     let chat = Element::create_div(cx)?;
     let mut chat_elem = chat.get();
-    chat_elem.add_class("chat")?;
+    chat_elem.add_class(HellStyle::W_0)?;
 
     let output_box_h = Element::create_div(cx)?;
     let mut output_box = output_box_h.get();
