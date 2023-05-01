@@ -42,9 +42,9 @@ async fn run_hell() -> HellResult<()> {
 
     let mut main = Element::create_main(cx)?.get();
     main.add_classes(&[
-        HellStyle::m_auto,
-        HellStyle::m_top_16,
-        HellStyle::max_w_4xl,
+        HellStyle::mgn_auto,
+        HellStyle::mgn_top_16,
+        HellStyle::max_width_4xl,
     ])?;
     main.set_text_content(Some(r#"
     skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj skldjflskjflksjl slfjls jlskj lsj

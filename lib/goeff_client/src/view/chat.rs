@@ -15,7 +15,7 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
     let chat_h = Element::create_div(cx)?;
     let mut chat = chat_h.get();
     chat.add_classes(&[
-        HellStyle::w_full,
+        HellStyle::width_full,
         HellStyle::flex,
         HellStyle::flex_col,
         HellStyle::items_center,

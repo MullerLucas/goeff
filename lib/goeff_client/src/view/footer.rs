@@ -14,9 +14,9 @@ pub async fn create_footer(cx: Context) -> HellResult<Element> {
 
     let mut footer_content = Element::create_div(cx)?.get();
     footer_content.add_classes(&[
-        HellStyle::max_w_4xl,
-        HellStyle::m_auto,
-        HellStyle::h_10,
+        HellStyle::max_width_4xl,
+        HellStyle::mgn_auto,
+        HellStyle::height_10,
         HellStyle::flex,
         HellStyle::items_center,
         HellStyle::gap_2,

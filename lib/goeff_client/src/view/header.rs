@@ -14,8 +14,8 @@ pub async fn create_header(cx: Context) -> HellResult<Element> {
 
     let mut header_content = Element::create_header(cx)?.get();
     header_content.add_classes(&[
-        HellStyle::m_auto,
-        HellStyle::max_w_4xl,
+        HellStyle::mgn_auto,
+        HellStyle::max_width_4xl,
         HellStyle::flex,
         HellStyle::items_center,
         HellStyle::gap_2,
@@ -23,7 +23,7 @@ pub async fn create_header(cx: Context) -> HellResult<Element> {
     header.append_child(&header_content)?;
 
     let mut title = Element::create_h1(cx)?.get();
-    title.add_class(HellStyle::text_2xl)?;
+    title.add_class(HellStyle::txt_2xl)?;
     title.set_text_content(Some("Goeff Jipedy"));
     header_content.append_child(&title)?;
 
