@@ -2,11 +2,12 @@ use hell_core::error::HellResult;
 use hell_mod_web_client::view::{Context, Element, ident::HellStyle, ElementContainer};
 
 
+#[allow(unused)]
 pub async fn create_footer(cx: Context) -> HellResult<Element> {
     let mut footer = Element::create_footer(cx)?.get();
     footer.add_classes(&[
         HellStyle::bg_secondary_400,
-        HellStyle::text_secondary_400,
+        HellStyle::txt_secondary_400,
         HellStyle::pos_fixed,
         HellStyle::inset_x_0,
         HellStyle::bottom_0,
