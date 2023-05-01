@@ -31,35 +31,34 @@ async fn run_hell() -> HellResult<()> {
     let state = GoeffClientState::new();
     let cx = state.cx();
 
-    let mut html = Element::create_html(cx)?.get();
-    html.add_classes(&[
-        HellStyle::height_full,
-    ])?;
+    let _ = Element::create_html(cx)?
+        .with_classes(&[
+            HellStyle::height_full,
+        ])?;
 
-    let mut body = Element::create_body(cx)?.get();
-    body.add_classes(&[
-        HellStyle::height_full,
-        HellStyle::bg_primary_400,
-        HellStyle::txt_primary_400,
-    ])?;
+    let mut body = Element::create_body(cx)?
+        .with_classes(&[
+            HellStyle::height_full,
+            HellStyle::bg_primary_400,
+            HellStyle::txt_primary_400,
+        ])?;
 
     let header = view::header::create_header(cx).await?;
     body.append_child(&header)?;
 
-    let mut main = Element::create_main(cx)?.get();
-    main.add_classes(&[
-        HellStyle::height_full,
-        HellStyle::mgn_auto,
-        HellStyle::max_width_4xl,
-        HellStyle::overflow_y_scroll,
-    ])?;
+    let mut main = Element::create_main(cx)?
+        .with_classes(&[
+            HellStyle::height_full,
+            HellStyle::mgn_auto,
+            HellStyle::max_width_4xl,
+            HellStyle::overflow_y_scroll,
+        ])?;
     body.append_child(&main)?;
 
     let chat = view::chat::create_chat(state).await?;
     main.append_child(&chat)?;
 
-    // let footer = view::footer::create_footer(cx).await?;
-    // body.append_child(&footer)?;
+
 
     utils::wait_for_end_of_universe().await.unwrap();
     Ok(())
