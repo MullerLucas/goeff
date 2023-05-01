@@ -418,6 +418,14 @@
     height: 10rem;
 }
 
+.height_44 {
+    height: 11rem;
+}
+
+.height_48 {
+    height: 12rem;
+}
+
 .height_px {
     height: 1px;
 }
@@ -1355,6 +1363,16 @@
 
 .overflow_y_scroll {
     overflow-y: scroll;
+}
+
+.overflow_scroll_hidden {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* @hell-ignore */
+.chat_container::-webkit-scrollbar {
+  display: none;
 }
 
 /* ---------------------------------------------------------------------------- */

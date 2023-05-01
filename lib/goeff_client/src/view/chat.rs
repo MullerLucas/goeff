@@ -11,7 +11,7 @@ use super::ident::GoeffStyle;
 
 
 
-pub async fn create_chat(state: State) -> HellResult<Element> {
+pub async fn append_chat(state: State, parent: &mut Element) -> HellResult<()> {
     let cx = state.cx();
 
     let mut chat = Element::create_div(cx)?
@@ -22,18 +22,26 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
             HellStyle::mgn_top_16,
             HellStyle::pad_4,
         ])?;
+    parent.append_child(&chat)?;
 
-
-    let (output_box, output_box_h) = Element::create_div(cx)?
+    let (mut output_box, output_box_h) = Element::create_div(cx)?
         .with_classes(&[
             HellStyle::height_full,
             HellStyle::width_full,
             HellStyle::flex,
             HellStyle::flex_col,
             HellStyle::gap_2,
+            HellStyle::height_14s20,
+            HellStyle::overflow_scroll_hidden,
         ])?
         .with_handle();
     chat.append_child(&output_box)?;
+
+    let first_msg = create_chat_message_element(state, &GoeffChatMsg {
+        role: GoeffChatRole::Temp,
+        content: String::from("..."),
+    })?.expect("failed to create initial message");
+    output_box.append_child(&first_msg)?;
 
     let mut controls_panel = Element::create_div(cx)?
         .with_classes(&[
@@ -131,10 +139,10 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
     });
 
     console_log!("[CHAT]: getting initial chat-state ...");
-    let chat_data = state.api().initial_chat().await?;
+    let chat_data = state.api().initialize_sos().await?;
     console_log!("[CHAT]: initial chat state received '{:?}'", chat_data);
     chat_state.set(GoeffChatState::WaitingForUserInput);
-    let chat_data = cx.create_signal(chat_data);
+    let sos_data = cx.create_signal(chat_data);
 
     // define update procedure
     // -----------------------
@@ -144,15 +152,25 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
         let mut output_box = output_box_h.get();
         output_box.set_inner_html("");
 
-        chat_data.with_mut(|d| {
+        sos_data.with_mut(|d| {
             console_info!("[CHAT]: create chat from data: {:#?}", d);
 
-            for msg in &d.messages {
+            for msg in &d.chat.messages {
                 if let Some(elem) = create_chat_message_element(state, msg).unwrap() {
                     output_box.append_child_unchecked(&elem);
                 }
             }
         });
+
+        let bottom_buffer = Element::create_div(cx).unwrap()
+            .with_classes(&[
+                HellStyle::height_44,
+            ]).unwrap();
+        output_box.append_child_unchecked(&bottom_buffer);
+
+        // TODO: abstract
+        // output_box.js_element().scroll_to_with_x_and_y(0.0, output_box.js_element().scroll_height() as f64);
+        bottom_buffer.js_element().scroll_into_view();
     });
 
     input_send_btn.add_event_listener("click", move |_| {
@@ -166,19 +184,59 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
             let user_input = input_field.value();
             input_field.set_value("");
 
-            chat_data.with_mut(|s| {
-                s.messages.push(GoeffChatMsg::new_user(&user_input));
-                s.messages.push(GoeffChatMsg::new_temp("..."));
+            sos_data.with_mut(|s| {
+                s.chat.messages.push(GoeffChatMsg::new_user(&user_input));
+                s.chat.messages.push(GoeffChatMsg::new_temp("..."));
             });
 
             // process chat
-            let old_chat_state = chat_data.get();
+            let old_chat_state = sos_data.get();
             console_info!("Old-Chat-State: {:?}", &old_chat_state);
-            let new_chat_state = state.api().process_chat(&old_chat_state).await.unwrap();
+            let new_chat_state = state.api().process_sos_chat(&old_chat_state).await.unwrap();
             console_info!("New-Chat-State: {:?}", new_chat_state);
 
-            chat_data.set(new_chat_state);
+            sos_data.set(new_chat_state);
 
+            chat_state.set(GoeffChatState::WaitingForUserInput);
+        });
+    })?;
+
+    split_btn.add_event_listener("click", move |_| {
+        spawn_local(async move {
+            chat_state.set(GoeffChatState::WaitingForAssistantResponse);
+            console_info!("split button clicked ...");
+
+            // append new user message
+            sos_data.with_mut(|s| {
+                s.chat.messages.push(GoeffChatMsg::new_user("I choose to Split"));
+                s.chat.messages.push(GoeffChatMsg::new_temp("..."));
+            });
+
+            // process chat
+            let old_chat_state = sos_data.get();
+            let new_chat_state = state.api().choose_sos_option(&old_chat_state).await.unwrap();
+
+            sos_data.set(new_chat_state);
+            chat_state.set(GoeffChatState::WaitingForUserInput);
+        });
+    })?;
+
+    steal_btn.add_event_listener("click", move |_| {
+        spawn_local(async move {
+            chat_state.set(GoeffChatState::WaitingForAssistantResponse);
+            console_info!("split button clicked ...");
+
+            // append new user message
+            sos_data.with_mut(|s| {
+                s.chat.messages.push(GoeffChatMsg::new_user("I choose to Steal"));
+                s.chat.messages.push(GoeffChatMsg::new_temp("..."));
+            });
+
+            // process chat
+            let old_chat_state = sos_data.get();
+            let new_chat_state = state.api().choose_sos_option(&old_chat_state).await.unwrap();
+
+            sos_data.set(new_chat_state);
             chat_state.set(GoeffChatState::WaitingForUserInput);
         });
     })?;
@@ -193,7 +251,7 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
         }
     })?;
 
-    Ok(chat)
+    Ok(())
 }
 
 

@@ -9,12 +9,14 @@ pub enum GoeffChatRole {
     System,
     Assistant,
     User,
+    Moderator,
 }
 
 impl From<GoeffChatRole> for LlmChatRole {
     fn from(value: GoeffChatRole) -> Self {
         match value {
-            GoeffChatRole::System => Self::System,
+            GoeffChatRole::System |
+            GoeffChatRole::Moderator => Self::System,
             GoeffChatRole::Assistant => Self::Assistant,
             GoeffChatRole::User => Self::User,
             _ => unreachable!(),
@@ -85,6 +87,10 @@ impl GoeffChatMsg {
         Self::new(GoeffChatRole::User, content)
     }
 
+    pub fn new_moderator(content: impl Into<String>) -> Self {
+        Self::new(GoeffChatRole::Moderator, content)
+    }
+
     pub fn merge(&mut self, other: Self) {
         self.content.push(' ');
         self.content.push_str(&other.content);
@@ -106,6 +112,16 @@ pub enum GoeffChatState {
     Initializing,
     WaitingForUserInput,
     WaitingForAssistantResponse,
+}
+
+// ----------------------------------------------------------------------------
+
+#[derive(Debug, Clone, serde:: Serialize, serde::Deserialize)]
+pub struct GoeffSosData {
+    pub chat: GoeffChatData,
+    pub round: u32,
+    pub player_money: u32,
+    pub assistant_money: u32,
 }
 
 // ----------------------------------------------------------------------------

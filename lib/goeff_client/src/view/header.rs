@@ -26,7 +26,7 @@ pub async fn create_header(cx: Context) -> HellResult<Element> {
 
     let title = Element::create_h1(cx)?
         .with_class(HellStyle::txt_2xl)?
-        .with_text_content(Some("Goeff Gipety"));
+        .with_text_content(Some("Goeff Gipety - Split or Steal"));
     header_content.append_child(&title)?;
 
     Ok(header)

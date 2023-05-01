@@ -55,10 +55,7 @@ async fn run_hell() -> HellResult<()> {
         ])?;
     body.append_child(&main)?;
 
-    let chat = view::chat::create_chat(state).await?;
-    main.append_child(&chat)?;
-
-
+    view::chat::append_chat(state, &mut main).await?;
 
     utils::wait_for_end_of_universe().await.unwrap();
     Ok(())
