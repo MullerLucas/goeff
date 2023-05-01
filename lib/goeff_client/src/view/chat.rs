@@ -14,17 +14,17 @@ use super::ident::GoeffStyle;
 pub async fn create_chat(state: State) -> HellResult<Element> {
     let cx = state.cx();
 
-    let (mut chat, chat_h) = Element::create_div(cx)?
+    let mut chat = Element::create_div(cx)?
         .with_classes(&[
             HellStyle::flex,
             HellStyle::flex_col,
             HellStyle::items_center,
             HellStyle::mgn_top_16,
             HellStyle::pad_4,
-        ])?
-        .with_handle();
+        ])?;
 
-    let (mut output_box, output_box_h) = Element::create_div(cx)?
+
+    let (output_box, output_box_h) = Element::create_div(cx)?
         .with_classes(&[
             HellStyle::height_full,
             HellStyle::width_full,
@@ -74,13 +74,48 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
         .with_classes(&[
             HellStyle::bg_submit_400,
             HellStyle::txt_submit_400,
-            HellStyle::pad_x_4,
+            HellStyle::pad_x_8,
             HellStyle::border_none,
             HellStyle::rounded_md,
         ])?
         .with_handle();
     inner_controls_pannel.append_child(&input_send_btn)?;
 
+    let split_btn = Element::create_button(cx)?
+        .with_text_content(Some("Split"))
+        .with_classes(&[
+            HellStyle::border_none,
+            HellStyle::bg_submit_400,
+            HellStyle::txt_submit_400,
+            HellStyle::col_span_2,
+            HellStyle::rounded_md,
+            HellStyle::height_16,
+        ])?;
+    inner_controls_pannel.append_child(&split_btn)?;
+
+    let steal_btn = Element::create_button(cx)?
+        .with_text_content(Some("Steal"))
+        .with_classes(&[
+            HellStyle::border_none,
+            HellStyle::bg_submit_400,
+            HellStyle::txt_submit_400,
+            HellStyle::col_span_2,
+            HellStyle::rounded_md,
+            HellStyle::height_16,
+        ])?;
+    inner_controls_pannel.append_child(&steal_btn)?;
+
+    let reset_btn = Element::create_button(cx)?
+        .with_text_content(Some("Reset"))
+        .with_classes(&[
+            HellStyle::border_none,
+            HellStyle::bg_deny_400,
+            HellStyle::txt_deny_400,
+            HellStyle::col_span_4,
+            HellStyle::rounded_md,
+            HellStyle::height_8,
+        ])?;
+    inner_controls_pannel.append_child(&reset_btn)?;
 
     // get initial_chat state
     // ----------------------
@@ -89,17 +124,6 @@ pub async fn create_chat(state: State) -> HellResult<Element> {
     let _ = cx.create_effect(move || {
         let chat_state = chat_state.get();
         console_log!("[CHAT]: chat state changed to '{:?}'", chat_state);
-
-        let mut chat_elem = chat_h.get();
-        // chat_elem.remove_classes(&[
-        //     get_class_chat_state(GoeffChatState::Initializing),
-        //     get_class_chat_state(GoeffChatState::WaitingForUserInput),
-        //     get_class_chat_state(GoeffChatState::WaitingForAssistantResponse),
-        // ]).unwrap();
-        //
-        // let new_class = get_class_chat_state(chat_state);
-        // console_warn!("[CHAT]: new state class: {:?}", new_class);
-        // chat_elem.add_class_uncheckd(new_class);
 
         let is_enabled = chat_state == GoeffChatState::WaitingForUserInput;
         let mut input_send_btn_elem = input_send_btn_h.get();
@@ -181,8 +205,9 @@ pub fn create_chat_message_element(state: State, data: &GoeffChatMsg) -> HellRes
     let cx = state.cx();
     let mut msg = Element::create_div(cx)?
         .with_classes(&[
-            HellStyle::pad_2,
+            HellStyle::pad_4,
             HellStyle::rounded_md,
+            HellStyle::border_solid,
         ])?;
 
     match data.role {
@@ -190,18 +215,21 @@ pub fn create_chat_message_element(state: State, data: &GoeffChatMsg) -> HellRes
             msg.add_classes(&[
                 HellStyle::bg_inactive_400,
                 HellStyle::txt_inactive_400,
+                HellStyle::border_inactive_400,
             ])?;
         }
         GoeffChatRole::Assistant => {
             msg.add_classes(&[
                 GoeffStyle::bg_assistant_400,
                 GoeffStyle::txt_assistant_400,
+                GoeffStyle::border_assistant_400,
             ])?;
         }
         GoeffChatRole::User => {
             msg.add_classes(&[
                 GoeffStyle::bg_user_400,
                 GoeffStyle::txt_user_400,
+                GoeffStyle::border_user_400,
             ])?;
         }
         _ => unreachable!()
@@ -217,20 +245,3 @@ pub fn create_chat_message_element(state: State, data: &GoeffChatMsg) -> HellRes
 
     Ok(Some(msg))
 }
-
-// pub fn get_class_for_role(role: GoeffChatRole) -> &'static str {
-//     match role {
-//         GoeffChatRole::Temp      => "role_temp",
-//         GoeffChatRole::System    => "role_system",
-//         GoeffChatRole::Assistant => "role_assistant",
-//         GoeffChatRole::User      => "role_user",
-//     }
-// }
-
-// pub fn get_class_chat_state(state: GoeffChatState) -> &'static str {
-//     match state {
-//         GoeffChatState::Initializing                => "chat_state_initializing",
-//         GoeffChatState::WaitingForUserInput         => "chat_state_waiting_for_user_input",
-//         GoeffChatState::WaitingForAssistantResponse => "chat_state_waiting_for_assistant_response",
-//     }
-// }

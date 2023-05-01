@@ -1,27 +1,53 @@
+/* :root { */
+/*     --bg-primary-400: #eeeeee; */
+/*     --txt-primary-400: #222222; */
+/*     --border-primary-400: #222222; */
+/**/
+/*     --bg-secondary-400: #222222; */
+/*     --txt-secondary-400: #eee; */
+/*     --border-secondary-400: #eee; */
+/**/
+/*     --bg-accent-400: #9ab4e6; */
+/*     --txt-accent-400: #222; */
+/*     --border-accent-400: #222; */
+/**/
+/*     --bg-submit-400: #c9a8d5; */
+/*     --txt-submit-400: #222; */
+/*     --border-submit-400: #222; */
+/**/
+/*     --bg-deny-400: #f075af; */
+/*     --txt-deny-400: #222; */
+/*     --border-deny-400: #f075af; */
+/**/
+/*     --bg-inactive-400: #666; */
+/*     --txt-inactive-400: #222; */
+/*     --border-inactive-400: #666; */
+/* } */
+
 :root {
-    --bg-primary-400: #eeeeee;
-    --txt-primary-400: #222222;
-    --border-primary-400: #222222;
+    --bg-primary-400: #ebdbb2;
+    --txt-primary-400: #282828;
+    --border-primary-400: #ebdbb2;
 
-    --bg-secondary-400: #222222;
-    --txt-secondary-400: #eee;
-    --border-secondary-400: #eee;
+    --bg-secondary-400: #282828;
+    --txt-secondary-400: #ebdbb2;
+    --border-secondary-400: #2828282;
 
-    --bg-accent-400: #9ab4e6;
-    --txt-accent-400: #222;
-    --border-accent-400: #222;
+    --bg-accent-400: #83a598;
+    --txt-accent-400: #2828282;
+    --border-accent-400: #83a598;
 
-    --bg-submit-400: #c9a8d5;
-    --txt-submit-400: #222;
-    --border-submit-400: #222;
+    --bg-submit-400: #83a598;
+    --txt-submit-400: #282828;
+    --border-submit-400: #458588;
 
-    --bg-deny-400: #c9a8d5;
-    --txt-deny-400: #222;
-    --border-deny-400: #222;
+    --bg-deny-400: #fb4934;
+    --txt-deny-400: #282828;
+    --border-deny-400: #fb4934;
 
-    --bg-inactive-400: #666;
-    --txt-inactive-400: #222;
-    --border-inactive-400: #666;
+    --bg-inactive-400: #a89984;
+    --txt-inactive-400: #2828282;
+    --border-inactive-400: #7c6f64;
 }
 
 #header { }
@@ -35,7 +61,7 @@
 }
 
 .bg_assistant_400 {
-    background-color: lightpink;
+    background-color: #8ec07c;
 }
 
 /* text */
@@ -45,7 +71,7 @@
 }
 
 .txt_assistant_400 {
-    color: #222;
+    color: #282828;
 }
 
 /* border */
@@ -55,7 +81,7 @@
 }
 
 .border_assistant_400 {
-    border-color: lightpink;
+    border-color: #689d6a;
 }
 
 .chat_input_gradient {
